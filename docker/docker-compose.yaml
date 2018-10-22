@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  dynamodb:
+    image: cnadiminti/dynamodb-local
+    command: -dbPath "/opt/dynamodb-storage" -sharedDb
+    ports:
+      - "8083:8000"
+    volumes:
+      - ${HOME}/dhv/dynamodb-local:/opt/dynamodb-storage
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    labels:
+      kompose.service.type: nodeport
+    ports:
+      - '6379:6379'
+    volumes:
+      - ${HOME}/dhv/redis_data:/bitnami/redis
